@@ -1,4 +1,4 @@
-Sub TruncateToTwoDecimalPlaces(ItemCode, BlackPrice, RedPrice, Discount)
+Sub ParseRegister(ItemCode, BlackPrice, RedPrice, Discount)
     'Declare variables
     Dim PriceColumnOne As String: PriceColumnOne = BlackPrice
     Dim PriceColumnTwo As String: PriceColumnTwo = RedPrice
