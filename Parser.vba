@@ -4,8 +4,6 @@ Sub TruncateToTwoDecimalPlaces()
     Dim PriceColumnTwo As String: PriceColumnTwo = "N"
     Dim DiscountColumn As String: DiscountColumn = "O"
     Dim CodeColumn As String: CodeColumn = "I"
-    Dim strPattern As String: strPattern = "^\d+,\d{2}$"
-    Dim strReplace As String: strReplace = ""
     Dim regEx As New RegExp
     Dim strInput As String
     Dim MyRange As Range
