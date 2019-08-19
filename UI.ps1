@@ -1,6 +1,6 @@
 #Global variables
 $script:SelectedRegister = $null
-
+$script:PersonalRepository = "C:\Users\Tsedik\AppData\Roaming\Microsoft\Excel\XLSTART\PERSONAL.XLSB"
 #Code
 Function Open-File ($Filter, $MultipleSelectionFlag)
 {
@@ -134,7 +134,12 @@ Function MainForm ()
             Show-MessageBox -Message $TextInMessage -Title "Невозможно начать" -Type OK
         } else {
             if ((Show-MessageBox -Message "Перед началом данной операции убедитесь в том, что у вас нет открытых Word и Excel документов.`r`nВо время работы скрипт закроет все Word и Excel документы, не сохраняя их, что может привести к потере данных!`r`nПродолжить?" -Title "Подтвердите действие" -Type YesNo) -eq "Yes") {
-                Populate-Register
+                $ExcelApp = New-Object -ComObject Excel.Application
+                $ExcelApp.Visible = $true
+                $Workbook = $ExcelApp.Workbooks.Open($script:PersonalRepository)
+                $Workbook = $ExcelApp.Workbooks.Open($script:SelectedRegister)
+                $Worksheet = $Workbook.Worksheets.Item(1)
+                $ExcelApp.Run('PERSONAL.XLSB!TruncateToTwoDecimalPlaces', "$($UpdateRegisterFormInputItemCode.Text)", "$($UpdateRegisterFormInputBlackPrice.Text)", "$($UpdateRegisterFormInputRedPrice.Text)", "$($UpdateRegisterFormInputDiscount.Text)")
                 $UpdateRegisterForm.Close()
             }
         }
