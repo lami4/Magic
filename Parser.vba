@@ -1,9 +1,9 @@
-Sub TruncateToTwoDecimalPlaces()
+Sub TruncateToTwoDecimalPlaces(ItemCode, BlackPrice, RedPrice, Discount)
     'Declare variables
-    Dim PriceColumnOne As String: PriceColumnOne = "M"
-    Dim PriceColumnTwo As String: PriceColumnTwo = "N"
-    Dim DiscountColumn As String: DiscountColumn = "O"
-    Dim CodeColumn As String: CodeColumn = "I"
+    Dim PriceColumnOne As String: PriceColumnOne = BlackPrice
+    Dim PriceColumnTwo As String: PriceColumnTwo = RedPrice
+    Dim DiscountColumn As String: DiscountColumn = Discount
+    Dim CodeColumn As String: CodeColumn = ItemCode
     Dim regEx As New RegExp
     Dim strInput As String
     Dim MyRange As Range
@@ -149,18 +149,18 @@ Sub TruncateToTwoDecimalPlaces()
     'DELETING UNWANTED COLUMNS
     Dim LastColumn As Integer
     Dim BannedColumnNames(1 To 12) As String
-    BannedColumnNames(1) = "ÊàòåãîðèÿÊÌ"
-    BannedColumnNames(2) = "Îñí.ØÊ"
-    BannedColumnNames(3) = "Êîììåíò Ìàðêåòèíã"
-    BannedColumnNames(4) = "Êîììåíò ÊÌ"
-    BannedColumnNames(5) = "Êîäïîñòàâùèêà"
-    BannedColumnNames(6) = "Ïîñòàâùèê"
-    BannedColumnNames(7) = "IdÈÄ Êàò.-äàòû äåéñòâèÿ"
-    BannedColumnNames(8) = "Íàçâàíèå àêöèè"
-    BannedColumnNames(9) = "ÒÎ ïëàí.,øò"
-    BannedColumnNames(10) = "ÒÎ ïëàí.,ðóá."
-    BannedColumnNames(11) = "Kpi14 Ðóá"
-    BannedColumnNames(12) = "Kpi14 Øò"
+    BannedColumnNames(1) = "КатегорияКМ"
+    BannedColumnNames(2) = "Осн.ШК"
+    BannedColumnNames(3) = "Коммент Маркетинг"
+    BannedColumnNames(4) = "Коммент КМ"
+    BannedColumnNames(5) = "Кодпоставщика"
+    BannedColumnNames(6) = "Поставщик"
+    BannedColumnNames(7) = "IdИД Кат.-даты действия"
+    BannedColumnNames(8) = "Название акции"
+    BannedColumnNames(9) = "ТО план.,шт"
+    BannedColumnNames(10) = "ТО план.,руб."
+    BannedColumnNames(11) = "Kpi14 Руб"
+    BannedColumnNames(12) = "Kpi14 Шт"
     LastColumn = ActiveWorkbook.Worksheets(1).Cells(1, ActiveWorkbook.Worksheets(1).Columns.Count).End(xlToLeft).Column
     'MsgBox (LastColumn)
     For t = LastColumn To 1 Step -1
