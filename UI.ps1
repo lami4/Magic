@@ -139,7 +139,7 @@ Function MainForm ()
                 $Workbook = $ExcelApp.Workbooks.Open($script:PersonalRepository)
                 $Workbook = $ExcelApp.Workbooks.Open($script:SelectedRegister)
                 $Worksheet = $Workbook.Worksheets.Item(1)
-                $ExcelApp.Run('PERSONAL.XLSB!TruncateToTwoDecimalPlaces', "$($UpdateRegisterFormInputItemCode.Text)", "$($UpdateRegisterFormInputBlackPrice.Text)", "$($UpdateRegisterFormInputRedPrice.Text)", "$($UpdateRegisterFormInputDiscount.Text)")
+                $ExcelApp.Run('PERSONAL.XLSB!ParseRegister', "$($UpdateRegisterFormInputItemCode.Text)", "$($UpdateRegisterFormInputBlackPrice.Text)", "$($UpdateRegisterFormInputRedPrice.Text)", "$($UpdateRegisterFormInputDiscount.Text)")
                 $UpdateRegisterForm.Close()
             }
         }
