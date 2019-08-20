@@ -1,6 +1,6 @@
 #Global variables
 $script:SelectedRegister = $null
-$script:PersonalRepository = "C:\Users\selyuto\AppData\Roaming\Microsoft\Excel\XLSTART\PERSONAL.XLSB"
+$script:PersonalRepository = ""
 #Code
 Function Open-File ($Filter, $MultipleSelectionFlag)
 {
