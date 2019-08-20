@@ -1,6 +1,6 @@
 #Global variables
 $script:SelectedRegister = $null
-$script:PersonalRepository = "C:\Users\Tsedik\AppData\Roaming\Microsoft\Excel\XLSTART\PERSONAL.XLSB"
+$script:PersonalRepository = "C:\Users\selyuto\AppData\Roaming\Microsoft\Excel\XLSTART\PERSONAL.XLSB"
 #Code
 Function Open-File ($Filter, $MultipleSelectionFlag)
 {
@@ -139,7 +139,7 @@ Function MainForm ()
                 $Workbook = $ExcelApp.Workbooks.Open($script:PersonalRepository)
                 $Workbook = $ExcelApp.Workbooks.Open($script:SelectedRegister)
                 $Worksheet = $Workbook.Worksheets.Item(1)
-                $ExcelApp.Run('PERSONAL.XLSB!ParseRegister', "$($UpdateRegisterFormInputItemCode.Text)", "$($UpdateRegisterFormInputBlackPrice.Text)", "$($UpdateRegisterFormInputRedPrice.Text)", "$($UpdateRegisterFormInputDiscount.Text)")
+                $ExcelApp.Run("$(Split-Path $script:PersonalRepository -Leaf)!ParseRegister", "$($UpdateRegisterFormInputItemCode.Text)", "$($UpdateRegisterFormInputBlackPrice.Text)", "$($UpdateRegisterFormInputRedPrice.Text)", "$($UpdateRegisterFormInputDiscount.Text)")
                 $UpdateRegisterForm.Close()
             }
         }
