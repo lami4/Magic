@@ -6,7 +6,7 @@ Sub ParseRegister(ItemCode, BlackPrice, RedPrice, Discount)
     Dim CodeColumn As String: CodeColumn = ItemCode
     Dim regEx As New RegExp
     Dim strInput As String
-    Dim MyRange As Range
+    Dim myRange As Range
     Dim ParsingTrigger As Boolean
     Dim RangeCoordinates As String
     Dim LastRow As String
@@ -15,23 +15,13 @@ Sub ParseRegister(ItemCode, BlackPrice, RedPrice, Discount)
     On Error Resume Next
     ActiveWorkbook.Worksheets(1).ShowAllData
     LastRow = ActiveWorkbook.Worksheets(1).Cells(ActiveWorkbook.Worksheets(1).Rows.Count, "A").End(xlUp).Row
-    'DELETING EMPTY CODE ROWS
-    RangeCoordinates = CodeColumn + "2:" + CodeColumn + LastRow
-    Set MyRange = ActiveSheet.Range(RangeCoordinates)
-    MyRange.AutoFilter Field:=9, Criteria1:=""
-    RangeCoordinates = "A2:" + "A" + LastRow
-    Set MyRange = ActiveSheet.Range(RangeCoordinates)
-    MyRange.Select
-    Selection.EntireRow.Delete
-    ActiveWorkbook.Worksheets(1).ShowAllData
-    'DELETING EMPTY CODE ROWS
     'PRICE COLUMN ONE
     RangeCoordinates = PriceColumnOne + "2:" + PriceColumnOne + LastRow
     ActiveWorkbook.Worksheets(1).Range(RangeCoordinates).Select
     Selection.NumberFormat = "@"
     'Set a range for PriceColumnOne and loop through it
-    Set MyRange = ActiveSheet.Range(RangeCoordinates)
-    For Each Cell In MyRange
+    Set myRange = ActiveSheet.Range(RangeCoordinates)
+    For Each Cell In myRange
         strInput = Cell.Value
         With regEx
             .Global = True
@@ -84,8 +74,8 @@ Sub ParseRegister(ItemCode, BlackPrice, RedPrice, Discount)
     ActiveWorkbook.Worksheets(1).Range(RangeCoordinates).Select
     Selection.NumberFormat = "@"
     'Set a range for PriceColumnTwo and loop through it
-    Set MyRange = ActiveSheet.Range(RangeCoordinates)
-    For Each Cell In MyRange
+    Set myRange = ActiveSheet.Range(RangeCoordinates)
+    For Each Cell In myRange
         strInput = Cell.Value
         With regEx
             .Global = True
@@ -138,14 +128,24 @@ Sub ParseRegister(ItemCode, BlackPrice, RedPrice, Discount)
     ActiveWorkbook.Worksheets(1).Range(RangeCoordinates).Select
     Selection.NumberFormat = "@"
     'Set a range for PriceColumnTwo and loop through it
-    Set MyRange = ActiveSheet.Range(RangeCoordinates)
+    Set myRange = ActiveSheet.Range(RangeCoordinates)
     Dim CellValue As Double
-    For Each Cell In MyRange
+    For Each Cell In myRange
     'Write code here
     CellValue = Cell.Value
     RoundedValue = Round(CellValue)
     Cell.Value = RoundedValue
     Next
+    'DELETING EMPTY CODE ROWS
+    RangeCoordinates = CodeColumn + "2:" + CodeColumn + LastRow
+    Set myRange = ActiveSheet.Range(RangeCoordinates)
+    myRange.AutoFilter Field:=9, Criteria1:=""
+    RangeCoordinates = "A2:" + "A" + LastRow
+    Set myRange = ActiveSheet.Range(RangeCoordinates)
+    myRange.Select
+    Selection.EntireRow.Delete
+    ActiveWorkbook.Worksheets(1).ShowAllData
+    'DELETING EMPTY CODE ROWS
     'DELETING UNWANTED COLUMNS
     Dim LastColumn As Integer
     Dim BannedColumnNames(1 To 12) As String
