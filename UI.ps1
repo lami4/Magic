@@ -1,6 +1,6 @@
 #Global variables
 $script:SelectedRegister = $null
-$script:PersonalRepository = "C:\Users\selyuto\AppData\Roaming\Microsoft\Excel\XLSTART\PERSONAL.XLSB"
+$script:PersonalRepository = ""
 #Code
 Function Open-File ($Filter, $MultipleSelectionFlag)
 {
@@ -174,7 +174,7 @@ Function MainForm ()
     $DeleteRedundantColumnsCheckbox.Checked = $false
     $DeleteRedundantColumnsCheckbox.Add_CheckStateChanged({})
     $Peter1Tab.Controls.Add($DeleteRedundantColumnsCheckbox)
-    #Удалить лишние столбцы
+    #Добавить колонку /B/
     $AddColumnBCheckbox = New-Object System.Windows.Forms.CheckBox
     $AddColumnBCheckbox.Width = 500
     $AddColumnBCheckbox.Text = "Добавить столбец /В/"
@@ -183,10 +183,10 @@ Function MainForm ()
     $AddColumnBCheckbox.Checked = $true
     $AddColumnBCheckbox.Add_CheckStateChanged({})
     $Peter1Tab.Controls.Add($AddColumnBCheckbox)
-    #Удалить лишние столбцы
+    #Удалить все города, кроме Санкт-Петербурга
     $DeleteAllButPeterCheckbox = New-Object System.Windows.Forms.CheckBox
     $DeleteAllButPeterCheckbox.Width = 500
-    $DeleteAllButPeterCheckbox.Text = "Убрать все города, кроме Санкт-Петербурга"
+    $DeleteAllButPeterCheckbox.Text = "Удалить все города, кроме Санкт-Петербурга"
     $DeleteAllButPeterCheckbox.Location = New-Object System.Drawing.Point(10,273) #x,y
     $DeleteAllButPeterCheckbox.Enabled = $true
     $DeleteAllButPeterCheckbox.Checked = $true
@@ -215,8 +215,13 @@ Function MainForm ()
                 $Workbook = $ExcelApp.Workbooks.Open($script:PersonalRepository)
                 $Workbook = $ExcelApp.Workbooks.Open($script:SelectedRegister)
                 $Worksheet = $Workbook.Worksheets.Item(1)
-                $ExcelApp.Run("$(Split-Path $script:PersonalRepository -Leaf)!ParseRegister", "$($UpdateRegisterFormInputItemCode.Text)", "$($UpdateRegisterFormInputBlackPrice.Text)", "$($UpdateRegisterFormInputRedPrice.Text)", "$($UpdateRegisterFormInputDiscount.Text)")
-                $UpdateRegisterForm.Close()
+                if ($DeleteEmptiStringsCheckbox.Checked -eq $true) {$DeleteEmptyRowsFlag = "true"} else {$DeleteEmptyRowsFlag = "false"}
+                if ($TruncatePricesAndRoundDiscountCheckbox.Checked -eq $true) {$NormalizePricesAndDiscountsFlag = "true"} else {$NormalizePricesAndDiscountsFlag = "false"}
+                if ($DeleteRedundantColumnsCheckbox.Checked -eq $true) {$RemoveRedundantColumnsFlag = "true"} else {$RemoveRedundantColumnsFlag = "false"}
+                if ($AddColumnBCheckbox.Checked -eq $true) {$AddBColumnFlag = "true"} else {$AddBColumnFlag = "false"}
+                if ($DeleteAllButPeterCheckbox.Checked -eq $true) {$DeleteCitiesFlag = "true"} else {$DeleteCitiesFlag = "false"}
+                $ExcelApp.Run("$(Split-Path $script:PersonalRepository -Leaf)!ParseRegister", "$($UpdateRegisterFormInputItemCode.Text)", "$($UpdateRegisterFormInputBlackPrice.Text)", "$($UpdateRegisterFormInputRedPrice.Text)", "$($UpdateRegisterFormInputDiscount.Text)", $DeleteEmptyRowsFlag, $NormalizePricesAndDiscountsFlag, $RemoveRedundantColumnsFlag, $AddBColumnFlag, $DeleteCitiesFlag)
+                #$UpdateRegisterForm.Close()
             }
         }
     })
