@@ -234,3 +234,48 @@ End Sub
 Function IsInArray(stringToBeFound As String, arr As Variant) As Boolean
   IsInArray = (UBound(Filter(arr, stringToBeFound)) > -1)
 End Function
+
+Sub CopyDataToAnotherFile()
+    Dim PiterOneBook As Workbook
+    Dim PiterTwoBook As Workbook
+    Dim PiterOneBookItemCodeRange As Range
+    Dim PiterTwoBookItemCodeRangeCoordintates As String
+    Dim LastRow As String
+    Dim PiterOneBookColumnBCoordinates As String
+    Dim PiterOneBookCorrectNameColumnCoordinates As String
+    Dim CurrentRow As String
+    PiterOneItemCodeColumn = "J" '''
+    PiterOneBColumn = "AA" '''
+    PiterOneCorrectNameColumn = "AB" '''
+    On Error Resume Next
+    ThisWorkbook.Worksheets(1).ShowAllData
+    'Open Piter_2
+    Set PiterOneBook = Workbooks.Open("C:\Users\selyuto\Desktop\Magik\21 êàòàëîã.xlsx")
+    MsgBox (PiterOneBook.FullName)
+    Set PiterTwoBook = Workbooks.Open("C:\Users\selyuto\Desktop\Magik\16 êàòàëîã — êîïèÿ.xlsx")
+    MsgBox (PiterTwoBook.FullName)
+    'Get last row in the Item code column
+    LastRow = PiterOneBook.Worksheets(1).Cells(PiterOneBook.Worksheets(1).Rows.Count, PiterOneItemCodeColumn).End(xlUp).Row
+    'Creates coordinates for the Item code column
+    PiterOneBookItemCodeRangeCoordintates = PiterOneItemCodeColumn + "2" + ":" + PiterOneItemCodeColumn + LastRow
+    'Message with coordinates
+    MsgBox (PiterOneBookItemCodeRangeCoordintates)
+    Set PiterOneBookItemCodeRange = PiterOneBook.Worksheets(1).Range(PiterOneBookItemCodeRangeCoordintates)
+    
+    For Each CodeItem In PiterOneBookItemCodeRange
+        If CodeItem.Value <> "" Then
+            'GET VALUE OF THE CURRENT ITEM CODE
+            MsgBox (CodeItem.Value)
+            'Create /B/ column coordinates
+            CurrentRow = CodeItem.Row
+            PiterOneBookColumnBCoordinates = PiterOneBColumn + CurrentRow
+            'MsgBox (PiterOneBookColumnBCoordinates)
+            'GET VALUE OF CORRESPONDING CELL IN COLUMN /B/
+            'MsgBox (PiterOneBook.Worksheets(1).Range(PiterOneBookColumnBCoordinates).Value)
+            'Create Correct Name column coordinates
+            PiterOneBookCorrectNameColumnCoordinates = PiterOneCorrectNameColumn + CurrentRow
+            'GET VALUE OF CORRESPONDING CELL IN COLUMN CORRECT NAME
+            MsgBox (PiterOneBook.Worksheets(1).Range(PiterOneBookCorrectNameColumnCoordinates).Value)
+        End If
+    Next CodeItem
+End Sub
