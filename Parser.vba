@@ -239,14 +239,25 @@ Sub CopyDataToAnotherFile()
     Dim PiterOneBook As Workbook
     Dim PiterTwoBook As Workbook
     Dim PiterOneBookItemCodeRange As Range
+    Dim PiterTwoBookItemCodeRange As Range
     Dim PiterTwoBookItemCodeRangeCoordintates As String
     Dim LastRow As String
     Dim PiterOneBookColumnBCoordinates As String
     Dim PiterOneBookCorrectNameColumnCoordinates As String
+    Dim CodeItemValue As String
     Dim CurrentRow As String
-    PiterOneItemCodeColumn = "J" '''
+    'Search function settings
+    Dim fnd As String, FirstFound As String
+    Dim FoundCell As Range, rng As Range
+    Dim SearchRange As Range, LastCell As Range
+    'Search function settings
+    PiterOneItemCodeColumn = "I" '''
     PiterOneBColumn = "AA" '''
-    PiterOneCorrectNameColumn = "AB" '''
+    'PiterOneCorrectNameColumn = "AB" '''
+    PiterTwoItemCodeColumn = "I" '''
+    PiterTwoBColumn = "AA" '''
+    PiterOneBColumnNumber = Range(PiterOneBColumn & 1).Column
+    'PiterOneCorrectNameColumnNumber = Range(PiterOneCorrectNameColumn & 1).Column
     On Error Resume Next
     ThisWorkbook.Worksheets(1).ShowAllData
     'Open Piter_2
@@ -254,6 +265,12 @@ Sub CopyDataToAnotherFile()
     MsgBox (PiterOneBook.FullName)
     Set PiterTwoBook = Workbooks.Open("C:\Users\selyuto\Desktop\Magik\16 êàòàëîã — êîïèÿ.xlsx")
     MsgBox (PiterTwoBook.FullName)
+    'Piter2 search range for Code Item Column
+    PiterTwoBookItemCodeRangeCoordintates = PiterTwoItemCodeColumn + ":" + PiterTwoItemCodeColumn
+    Set SearchRange = PiterTwoBook.Worksheets(1).Range(PiterTwoBookItemCodeRangeCoordintates)
+    Set LastCell = SearchRange.Cells(SearchRange.Cells.Count)
+    'MsgBox (PiterTwoBookItemCodeRangeCoordintates)
+    'MsgBox (SearchRange.Cells.Count)
     'Get last row in the Item code column
     LastRow = PiterOneBook.Worksheets(1).Cells(PiterOneBook.Worksheets(1).Rows.Count, PiterOneItemCodeColumn).End(xlUp).Row
     'Creates coordinates for the Item code column
@@ -261,21 +278,25 @@ Sub CopyDataToAnotherFile()
     'Message with coordinates
     MsgBox (PiterOneBookItemCodeRangeCoordintates)
     Set PiterOneBookItemCodeRange = PiterOneBook.Worksheets(1).Range(PiterOneBookItemCodeRangeCoordintates)
-    
     For Each CodeItem In PiterOneBookItemCodeRange
-        If CodeItem.Value <> "" Then
+        CodeItemValue = CodeItem.Value
+        CurrentRow = CodeItem.Row
+        If CodeItemValue <> "" Then
             'GET VALUE OF THE CURRENT ITEM CODE
-            MsgBox (CodeItem.Value)
-            'Create /B/ column coordinates
-            CurrentRow = CodeItem.Row
-            PiterOneBookColumnBCoordinates = PiterOneBColumn + CurrentRow
-            'MsgBox (PiterOneBookColumnBCoordinates)
+            MsgBox (CodeItemValue)
             'GET VALUE OF CORRESPONDING CELL IN COLUMN /B/
-            'MsgBox (PiterOneBook.Worksheets(1).Range(PiterOneBookColumnBCoordinates).Value)
-            'Create Correct Name column coordinates
-            PiterOneBookCorrectNameColumnCoordinates = PiterOneCorrectNameColumn + CurrentRow
-            'GET VALUE OF CORRESPONDING CELL IN COLUMN CORRECT NAME
-            MsgBox (PiterOneBook.Worksheets(1).Range(PiterOneBookCorrectNameColumnCoordinates).Value)
+            If PiterOneBook.Worksheets(1).Columns(PiterOneBColumnNumber).Cells(CurrentRow).Value <> "" Then
+                    MsgBox (PiterOneBook.Worksheets(1).Columns(PiterOneBColumnNumber).Cells(CurrentRow).Value)
+                    'Find the same itemcode in Piter_2 and paste the value to column b
+                    Set FoundCell = SearchRange.Find(what:=CodeItemValue, after:=LastCell, LookIn:=xlValues)
+                    If Not FoundCell Is Nothing Then
+                        FirstFound = FoundCell.Address
+                        Do
+                            MsgBox ("found")
+                            Set FoundCell = SearchRange.FindNext(FoundCell)
+                        Loop While (FoundCell.Address <> FirstFound)
+                    End If
+            End If
         End If
     Next CodeItem
 End Sub
