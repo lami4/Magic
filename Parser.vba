@@ -247,9 +247,10 @@ Sub CopyDataToAnotherFile()
     Dim CodeItemValue As String
     Dim CurrentRow As String
     'Search function settings
-    Dim fnd As String, FirstFound As String
-    Dim FoundCell As Range, rng As Range
-    Dim SearchRange As Range, LastCell As Range
+    Dim FirstFound As String
+    Dim FoundCell As Range
+    Dim SearchRange As Range
+    Dim LastCell As Range
     'Search function settings
     PiterOneItemCodeColumn = "I" '''
     PiterOneBColumn = "AA" '''
