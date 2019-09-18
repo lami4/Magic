@@ -246,6 +246,8 @@ Sub CopyDataToAnotherFile()
     Dim PiterOneBookCorrectNameColumnCoordinates As String
     Dim CodeItemValue As String
     Dim CurrentRow As String
+    Dim CurrentRowBookTwo As String
+    Dim myRange As Range
     'Search function settings
     Dim FirstFound As String
     Dim FoundCell As Range
@@ -257,22 +259,104 @@ Sub CopyDataToAnotherFile()
     'PiterOneCorrectNameColumn = "AB" '''
     PiterTwoItemCodeColumn = "I" '''
     PiterTwoBColumn = "AA" '''
+    PeterTwoCodeColumnDeleteEmptyRows = "I" '''
     PiterOneBColumnNumber = Range(PiterOneBColumn & 1).Column
+    PiterTwoBColumnNumber = Range(PiterTwoBColumn & 1).Column
     'PiterOneCorrectNameColumnNumber = Range(PiterOneCorrectNameColumn & 1).Column
-    On Error Resume Next
-    ThisWorkbook.Worksheets(1).ShowAllData
+
     'Open Piter_2
     Set PiterOneBook = Workbooks.Open("C:\Users\selyuto\Desktop\Magik\21 êàòàëîã.xlsx")
     MsgBox (PiterOneBook.FullName)
     Set PiterTwoBook = Workbooks.Open("C:\Users\selyuto\Desktop\Magik\16 êàòàëîã — êîïèÿ.xlsx")
     MsgBox (PiterTwoBook.FullName)
+    On Error Resume Next
+    PiterOneBook.Worksheets(1).ShowAllData
+    On Error Resume Next
+    PiterTwoBook.Worksheets(1).ShowAllData
+    PiterTwoDeleteCitiesFlag = "true"
+    'DELETING CITIES
+    If PiterTwoDeleteCitiesFlag = "true" Then
+        Dim CitiesRange As Range
+        Dim CitiesRangeCoordinates As String
+        On Error Resume Next
+        PiterTwoBook.Worksheets(1).ShowAllData
+        LastRow = PiterTwoBook.Worksheets(1).Cells(PiterTwoBook.Worksheets(1).Rows.Count, "A").End(xlUp).Row
+        MsgBox (LastRow)
+        Dim BannedCities(1 To 24) As String
+        BannedCities(1) = "Àñòðàõàíü"
+        BannedCities(2) = "Âîëãîãðàä"
+        BannedCities(3) = "Âîðîíåæ"
+        BannedCities(4) = "Åêàòåðèíáóðã"
+        BannedCities(5) = "Èâàíîâî"
+        BannedCities(6) = "Èðêóòñê"
+        BannedCities(7) = "Êðàñíîäàð"
+        BannedCities(8) = "Êðàñíîÿðñê"
+        BannedCities(9) = "Ëèïåöê"
+        BannedCities(10) = "Ìîñêâà"
+        BannedCities(11) = "Ìóðìàíñê"
+        BannedCities(12) = "Íèæíèé Íîâãîðîä"
+        BannedCities(13) = "Íîâîñèáèðñê"
+        BannedCities(14) = "Îìñê"
+        BannedCities(15) = "Îðåíáóðã"
+        BannedCities(16) = "Ðîñòîâ"
+        BannedCities(17) = "Ñàðàòîâ"
+        BannedCities(18) = "Ñî÷è"
+        BannedCities(19) = "Ñòàâðîïîëü"
+        BannedCities(20) = "Ñóðãóò"
+        BannedCities(21) = "Ñûêòûâêàð"
+        BannedCities(22) = "Òîëüÿòòè"
+        BannedCities(23) = "Óôà"
+        BannedCities(24) = "Òþìåíü"
+        For Each City In BannedCities
+            CitiesRangeCoordinates = "A2:A" + LastRow
+            Set CitiesRange = PiterTwoBook.Worksheets(1).Range(CitiesRangeCoordinates)
+            If Not IsError(Application.Match(City, CitiesRange, 0)) Then
+                CitiesRange.AutoFilter Field:=1, Criteria1:=City
+                CitiesRangeCoordinates = "A2:A" + LastRow
+                Set CitiesRange = PiterTwoBook.Worksheets(1).Range(CitiesRangeCoordinates)
+                CitiesRange.Select
+                Selection.EntireRow.Delete
+                PiterTwoBook.Worksheets(1).ShowAllData
+            End If
+        Next City
+    End If
+    'DELETING CITIES
+    'INSERTING COLUMN "CORRECT NAME"
+    PiterTwoAddBColumnFlag = "true"
+    If PiterTwoAddBColumnFlag = "true" Then
+        LastColumn = PiterTwoBook.Worksheets(1).Cells(1, PiterTwoBook.Worksheets(1).Columns.Count).End(xlToLeft).Column
+        LastColumn = LastColumn + 1
+        PiterTwoBook.Worksheets(1).Columns(LastColumn).Cells(1).Value = "Ïðàâèëüíîå íàèìåíîâàíèå"
+    End If
+    'INSERTING COLUMN "CORRECT NAME"
+    PiterTwoDeleteEmptyRowsFlag = "true"
+    'DELETING EMPTY CODE ROWS
+    If PiterTwoDeleteEmptyRowsFlag = "true" Then
+        LastRow = PiterTwoBook.Worksheets(1).Cells(PiterTwoBook.Worksheets(1).Rows.Count, "A").End(xlUp).Row
+        RangeCoordinates = PeterTwoCodeColumnDeleteEmptyRows + "2:" + PeterTwoCodeColumnDeleteEmptyRows + LastRow
+        Set myRange = PiterTwoBook.Worksheets(1).Range(RangeCoordinates)
+        myRange.AutoFilter Field:=9, Criteria1:=""
+        RangeCoordinates = "A2:" + "A" + LastRow
+        Set myRange = ActiveSheet.Range(RangeCoordinates)
+        myRange.Select
+        Selection.EntireRow.Delete
+        ActiveWorkbook.Worksheets(1).ShowAllData
+    End If
+    'DELETING EMPTY CODE ROWS
+    
+    
+    'MsgBox (PiterTwoBookItemCodeRangeCoordintates)
+    'MsgBox (SearchRange.Cells.Count)
+    'Get last row in the Item code column
+    On Error Resume Next
+    PiterOneBook.Worksheets(1).ShowAllData
+    On Error Resume Next
+    PiterTwoBook.Worksheets(1).ShowAllData
     'Piter2 search range for Code Item Column
     PiterTwoBookItemCodeRangeCoordintates = PiterTwoItemCodeColumn + ":" + PiterTwoItemCodeColumn
     Set SearchRange = PiterTwoBook.Worksheets(1).Range(PiterTwoBookItemCodeRangeCoordintates)
     Set LastCell = SearchRange.Cells(SearchRange.Cells.Count)
-    'MsgBox (PiterTwoBookItemCodeRangeCoordintates)
-    'MsgBox (SearchRange.Cells.Count)
-    'Get last row in the Item code column
+    'Piter2 search range for Code Item Column
     LastRow = PiterOneBook.Worksheets(1).Cells(PiterOneBook.Worksheets(1).Rows.Count, PiterOneItemCodeColumn).End(xlUp).Row
     'Creates coordinates for the Item code column
     PiterOneBookItemCodeRangeCoordintates = PiterOneItemCodeColumn + "2" + ":" + PiterOneItemCodeColumn + LastRow
@@ -287,16 +371,17 @@ Sub CopyDataToAnotherFile()
             MsgBox (CodeItemValue)
             'GET VALUE OF CORRESPONDING CELL IN COLUMN /B/
             If PiterOneBook.Worksheets(1).Columns(PiterOneBColumnNumber).Cells(CurrentRow).Value <> "" Then
-                    MsgBox (PiterOneBook.Worksheets(1).Columns(PiterOneBColumnNumber).Cells(CurrentRow).Value)
-                    'Find the same itemcode in Piter_2 and paste the value to column b
-                    Set FoundCell = SearchRange.Find(what:=CodeItemValue, after:=LastCell, LookIn:=xlValues)
-                    If Not FoundCell Is Nothing Then
-                        FirstFound = FoundCell.Address
-                        Do
-                            MsgBox ("found")
-                            Set FoundCell = SearchRange.FindNext(FoundCell)
-                        Loop While (FoundCell.Address <> FirstFound)
-                    End If
+                MsgBox (PiterOneBook.Worksheets(1).Columns(PiterOneBColumnNumber).Cells(CurrentRow).Value)
+                'Find the same itemcode in Piter_2 and paste the value to column b
+                Set FoundCell = SearchRange.Find(what:=CodeItemValue, after:=LastCell, LookIn:=xlValues)
+                If Not FoundCell Is Nothing Then
+                    FirstFound = FoundCell.Address
+                    Do
+                        MsgBox ("found")
+                        PiterTwoBook.Worksheets(1).Columns(PiterTwoBColumnNumber).Cells(FoundCell.Row).Value = PiterOneBook.Worksheets(1).Columns(PiterOneBColumnNumber).Cells(CurrentRow).Value
+                        Set FoundCell = SearchRange.FindNext(FoundCell)
+                    Loop While (FoundCell.Address <> FirstFound)
+                End If
             End If
         End If
     Next CodeItem
