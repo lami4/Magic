@@ -78,7 +78,7 @@ Function MainForm ()
     #Удалить пустые строки по коду товара
     $DeleteEmptiStringsCheckboxPiter2 = New-Object System.Windows.Forms.CheckBox
     $DeleteEmptiStringsCheckboxPiter2.Width = 350
-    $DeleteEmptiStringsCheckboxPiter2.Text = "Удалить пустые строки по коду товара"
+    $DeleteEmptiStringsCheckboxPiter2.Text = "Удалить пустые строки по коду товара в файле Питер_2"
     $DeleteEmptiStringsCheckboxPiter2.Location = New-Object System.Drawing.Point(10,20) #x,y 10,45
     $DeleteEmptiStringsCheckboxPiter2.Enabled = $true
     $DeleteEmptiStringsCheckboxPiter2.Checked = $false
@@ -101,8 +101,8 @@ Function MainForm ()
     $AdditionalSettingsGroupBox.Controls.Add($UpdateRegisterFormInputItemCodePiter2)
     #Округлить скидку и сократить цены до двух дробных разрядов без округления
     $TruncatePricesAndRoundDiscountCheckboxPiter2 = New-Object System.Windows.Forms.CheckBox
-    $TruncatePricesAndRoundDiscountCheckboxPiter2.Width = 500
-    $TruncatePricesAndRoundDiscountCheckboxPiter2.Text = "Округлить скидку и сократить цены до двух дробных разрядов без округления"
+    $TruncatePricesAndRoundDiscountCheckboxPiter2.Width = 600
+    $TruncatePricesAndRoundDiscountCheckboxPiter2.Text = "Округлить скидку и сократить цены до двух дробных разрядов без округления в файле Питер_2"
     $TruncatePricesAndRoundDiscountCheckboxPiter2.Location = New-Object System.Drawing.Point(10,80) #x,y 10,105
     $TruncatePricesAndRoundDiscountCheckboxPiter2.Enabled = $true
     $TruncatePricesAndRoundDiscountCheckboxPiter2.Checked = $false
@@ -166,7 +166,7 @@ Function MainForm ()
     #Удалить лишние столбцы
     $DeleteRedundantColumnsCheckboxPiter2 = New-Object System.Windows.Forms.CheckBox
     $DeleteRedundantColumnsCheckboxPiter2.Width = 500
-    $DeleteRedundantColumnsCheckboxPiter2.Text = "Удалить лишние столбцы"
+    $DeleteRedundantColumnsCheckboxPiter2.Text = "Удалить лишние столбцы в файле Питер_2"
     $DeleteRedundantColumnsCheckboxPiter2.Location = New-Object System.Drawing.Point(10,198) #x,y 10,223
     $DeleteRedundantColumnsCheckboxPiter2.Enabled = $true
     $DeleteRedundantColumnsCheckboxPiter2.Checked = $false
@@ -207,7 +207,7 @@ Function MainForm ()
     $Piter1ItemCodeInput = New-Object System.Windows.Forms.TextBox 
     $Piter1ItemCodeInput.Location = New-Object System.Drawing.Point(85,57) #-3x,y
     $Piter1ItemCodeInput.Width = 25
-    $Piter1ItemCodeInput.Text = ""
+    $Piter1ItemCodeInput.Text = "I"
     $Piter1GroupBox.Controls.Add($Piter1ItemCodeInput)
     #Надпись "/B/"
     $Piter1ColumnBLabel = New-Object System.Windows.Forms.Label
@@ -270,7 +270,7 @@ Function MainForm ()
     $Piter2ItemCodeInput = New-Object System.Windows.Forms.TextBox 
     $Piter2ItemCodeInput.Location = New-Object System.Drawing.Point(85,57) #-3x,y
     $Piter2ItemCodeInput.Width = 25
-    $Piter2ItemCodeInput.Text = ""
+    $Piter2ItemCodeInput.Text = "I"
     $Piter2GroupBox.Controls.Add($Piter2ItemCodeInput)
     #Надпись "/B/"
     $Piter2ColumnBLabel= New-Object System.Windows.Forms.Label
@@ -341,6 +341,16 @@ Function MainForm ()
             Show-MessageBox -Message $TextInMessage -Title "Невозможно начать" -Type OK
         } else {
             if ((Show-MessageBox -Message "Перед началом данной операции убедитесь в том, что у вас нет открытых Word и Excel документов.`r`nВо время работы скрипт закроет все Word и Excel документы, не сохраняя их, что может привести к потере данных!`r`nПродолжить?" -Title "Подтвердите действие" -Type YesNo) -eq "Yes") {
+                $ExcelAppPiterTwo = New-Object -ComObject Excel.Application
+                $ExcelAppPiterTwo.Visible = $true
+                $Workbook = $ExcelAppPiterTwo.Workbooks.Open($script:PersonalRepository)
+                if ($DeleteEmptiStringsCheckboxPiter2.Checked -eq $true) {$PiterTwoDeleteEmptyRowsFlag = "true"} else {$PiterTwoDeleteEmptyRowsFlag = "false"}
+                if ($TruncatePricesAndRoundDiscountCheckboxPiter2.Checked -eq $true) {$NormalizePricesAndDiscountsFlag = "true"} else {$NormalizePricesAndDiscountsFlag = "false"}
+                if ($DeleteRedundantColumnsCheckboxPiter2.Checked -eq $true) {$RemoveRedundantColumnsFlag = "true"} else {$RemoveRedundantColumnsFlag = "false"}
+                if ($Piter2CorrectNameCheckbox.Checked -eq $true) {$PiterTwoAddBColumnFlag = "true"} else {$PiterTwoAddBColumnFlag = "false"}
+                if ($Piter2RemoveCitiesCheckbox.Checked -eq $true) {$PiterTwoDeleteCitiesFlag = "true"} else {$PiterTwoDeleteCitiesFlag = "false"}
+                $ExcelAppPiterTwo.Run("$(Split-Path $script:PersonalRepository -Leaf)!CopyDataToAnotherFile", "$script:Piter1RegisterFile", "$($Piter1ItemCodeInput.Text)", "$($Piter1ColumnBInput.Text)", "$script:Piter2RegisterFile", "$($Piter2ItemCodeInput.Text)", "$($Piter2ColumnBInput.Text)", "$PiterTwoAddBColumnFlag", "$PiterTwoDeleteCitiesFlag", "$PiterTwoDeleteEmptyRowsFlag", "$($UpdateRegisterFormInputItemCodePiter2.Text)", "$NormalizePricesAndDiscountsFlag", "$($UpdateRegisterFormInputBlackPricePiter2.Text)", "$($UpdateRegisterFormInputRedPricePiter2.Text)", "$($UpdateRegisterFormInputDiscountPiter2.Text)", "$RemoveRedundantColumnsFlag")
+                #$UpdateRegisterForm.Close()
             }
         }
     })
