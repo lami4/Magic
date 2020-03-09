@@ -1,4 +1,5 @@
 clear
+fgfhfghfghfghfgh
 $ExcelApp = New-Object -ComObject Excel.Application
 $ExcelApp.Visible = $false
 $Workbook = $ExcelApp.Workbooks.Open("C:\Users\selyuto\Desktop\Magik\16 каталог.xlsx")
@@ -27,6 +28,7 @@ Function Delete-UnwantedColumns ($Worksheet, $ExcelApp)
     }
 }
 Delete-UnwantedColumns -Worksheet $Worksheet -ExcelApp $ExcelApp
+fghfghfghfgh
 
 Function Change-ColumnDataFormatToNumeric ($Worksheet, $ExcelApp)
 {
@@ -46,6 +48,7 @@ Change-ColumnDataFormatToNumeric -Worksheet $Worksheet -ExcelApp $ExcelApp
 
 Function Truncate-ToTwoDecimalPlaces ($Worksheet, $ExcelApp, $Column)
 {
+fghfhgfghfghfgh
     try {$Worksheet.ShowAllData()} catch {"ShowAllData already applied"}
     $LastRow = $Worksheet.Cells.Item($Worksheet.Rows.Count, "A").End(-4162).Row
     $Worksheet.Range("$($Column)2:$($Column)$($LastRow)").Select()
